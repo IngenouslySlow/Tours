@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const csp = require("express-csp");
 const compression = require("compression");
 const app = express();
+app.enable("trust proxy");
 //Own Modules
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");

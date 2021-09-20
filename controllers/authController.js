@@ -13,16 +13,16 @@ const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES,
   });
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
-  const options = {
+  res.cookie("jwt", token, {
     httpOnly: true, //This is to protect from the cross site scripting attacks.
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-  };
-  if (process.env.NODE_ENV === "production") options.secure = true; //This is to make sure that the cookie is only sent over https.
-  res.cookie("jwt", token, options);
+    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    // secure: req.secure || req.get('x-forwarded-proto') === 'https',
+  });
   return res.status(statusCode).json({
     status: "success",
     token,
@@ -42,7 +42,7 @@ exports.signUp = createAsync(async (req, res, next) => {
   const url = `${req.protocol}://${req.get("host")}`;
   await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 
 exports.login = createAsync(async (req, res, next) => {
@@ -57,7 +57,7 @@ exports.login = createAsync(async (req, res, next) => {
     return next(new AppError("Invalid Email or Password", 401));
   }
   //3.Send the token
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 //Protect Routes
@@ -202,7 +202,7 @@ exports.resetPassword = createAsync(async (req, res, next) => {
   await user.save();
 
   //Log the user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = createAsync(async (req, res, next) => {
@@ -222,7 +222,7 @@ exports.updatePassword = createAsync(async (req, res, next) => {
   await user.save();
 
   //Sending back the response
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.deleteUser = createAsync(async (req, res) => {
