@@ -43,7 +43,7 @@ csp.extend(app, {
         "https://*.cloudflare.com/",
         "https://bundle.js:8828",
         "ws://localhost:56558/",
-        "http://127.0.0.1:3000/api/v1/bookings/checkout-session/5c88fa8cf4afda39709c295a",
+        "/api/v1/bookings/checkout-session/5c88fa8cf4afda39709c295a",
       ],
       "worker-src": [
         "self",
@@ -88,7 +88,7 @@ csp.extend(app, {
         "https://*.cloudflare.com/",
         "https://bundle.js:*",
         "ws://localhost:*/",
-        "http://127.0.0.1:3000/api/v1/bookings/checkout-session/5c88fa8cf4afda39709c295a",
+        "/api/v1/bookings/checkout-session/5c88fa8cf4afda39709c295a",
       ],
     },
   },
