@@ -5,9 +5,7 @@ import { showAlert } from "./alert";
 export const updateSettings = async (data, type) => {
   try {
     const url =
-      type === "password"
-        ? "http://localhost:3000/users/updatePassword"
-        : "http://localhost:3000/users/updateMe";
+      type === "password" ? "/users/updatePassword" : "/users/updateMe";
     const res = await axios({
       method: "PATCH",
       url,

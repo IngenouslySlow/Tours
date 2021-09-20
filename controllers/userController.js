@@ -85,7 +85,7 @@ exports.createUser = (req, res) => {
 exports.deleteUser = factory.deleteOne(User);
 
 exports.updateMe = createAsync(async (req, res, next) => {
-  console.log(req.file);
+  // console.log(req.file);
   //1) Checking if the user entered password or passwordConfirm
   if (req.body.password || req.body.passwordConfirm)
     next(
