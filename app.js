@@ -10,8 +10,7 @@ const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
 const csp = require("express-csp");
-const cors = require("cors");
-
+const compression = require("compression");
 const app = express();
 //Own Modules
 const tourRouter = require("./routes/tourRoutes");
@@ -117,7 +116,7 @@ app.use(mongoSanitize());
 
 //Data sanitization against XSS
 app.use(xss());
-
+app.use(compression());
 //Prevent parameter pollution
 app.use(
   hpp({
@@ -135,6 +134,7 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
+
 //Middlewares
 app.use("/", viewRouter);
 app.use("/api/v1/tours", tourRouter);
